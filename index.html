@@ -8,7 +8,7 @@
         body {
             font-family: 'Arial', sans-serif;
             margin: 0;
-            padding-top: 100px; /* espacio para header fijo */
+            padding-top: 140px; /* espacio para header fijo (aumentado para logo más grande) */
             background: linear-gradient(135deg, #4CAF50, #2196F3);
             color: #333;
             line-height: 1.9;
@@ -16,12 +16,15 @@
         header {
             background: rgba(0, 0, 0, 0.8);
             color: white;
-            padding: 20px;
-            text-align: center;
+            padding: 14px 20px; /* ligeramente más compacto verticalmente */
             position: fixed;
             width: 100%;
             top: 0;
             z-index: 100;
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* centra logo + título + nav */
+            gap: 8px;
         }
         nav ul {
             list-style: none;
@@ -208,8 +211,10 @@
             z-index: 0;
             pointer-events: none;
         }
-        .watermark-img { width:100%; height:auto; display:block; filter: saturate(0.95); }
-        .header-logo { position: absolute; left: 18px; top: 8px; height: 56px; width: auto; z-index: 110; }
+    .watermark-img { width:100%; height:auto; display:block; filter: saturate(0.95); }
+    /* Header branding: logo centrado y más visible */
+    .header-logo { position: static; height: 88px; width: auto; display: block; margin: 4px auto 0; z-index: 110; }
+    header h1 { margin: 6px 0 0; font-size: 1.25rem; line-height: 1.1; }
 
         /* Responsiveness: ajustar tipografías y paddings en pantallas pequeñas */
         @media (max-width: 800px) {
@@ -221,6 +226,9 @@
             .section-title { font-size: 1.6em; margin-bottom: 32px; }
             /* Reduce internal card max-height on small screens to keep forms usable */
             .accordion .card-like { max-height: 60vh; }
+            /* Ajuste del logo en pantallas pequeñas */
+            .header-logo { height: 64px; }
+            header h1 { font-size: 1.05rem; }
         }
         /* Modal fullscreen for forms */
         .modal-overlay {
@@ -296,10 +304,10 @@
 
     <section id="identidad">
         <h2 class="section-title">Identidad de Territorio</h2>
-        <p>Refuerzo emocional y trazabilidad operativa. Ancla tu marca en el concepto de identidad territorial con calidad tipo exportación e integridad organizacional.</p>
+        <p>Emoción y trazabilidad operativa. Ancla tu marca en el concepto de identidad territorial con calidad tipo exportación e integridad organizacional.</p>
     <div class="card">
             <h3>Propuesta de Valor</h3>
-            <p>Ofrecemos certificación emocional y lógica: inmortaliza tu producto en una obra de arte duradera, uniendo pasión del cine con precisión tecnológica.</p>
+            <p>Ofrecemos lógica y emoción: inmortaliza tu producto en una obra de arte duradera, uniendo pasión del cine con precisión tecnológica.</p>
         </div>
     </section>
 
