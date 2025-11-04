@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Identidad de Territorio - Inspirando Calidad y Cultura</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding-top: 100px; /* espacio para header fijo */
+            background: linear-gradient(135deg, #4CAF50, #2196F3);
+            color: #333;
+            line-height: 1.9;
+        }
+        header {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #FFD700;
+        }
+        .hero {
+            min-height: calc(100vh - 120px); /* ajustar al header */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background: url('https://source.unsplash.com/featured/?landscape,fruit,tree,technology') no-repeat center/cover;
+            color: white;
+            position: relative;
+            padding: 40px 0;
+        }
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1;
+        }
+        .hero div {
+            position: relative;
+            z-index: 2;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+        }
+        .hero h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            animation: fadeIn 2s;
+        }
+        .hero p {
+            font-size: 1.5em;
+            margin-bottom: 30px;
+        }
+        .btn {
+            background: #FFD700;
+            color: #333;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background 0.3s;
+        }
+        .btn:hover {
+            background: #FFA500;
+        }
+        /* párrafos fuera de los recuadros: centrados y con color claro para contraste */
+        section > p {
+            color: #cfeeff; /* azul claro legible sobre el fondo verde/azul */
+            text-shadow: 0 1px 0 rgba(255,255,255,0.25);
+            margin: 0 auto 26px;
+            max-width: 1100px; /* alinear con el ancho de las tarjetas */
+            text-align: center;
+            font-size: 1.05em;
+        }
+        .section-title {
+            font-size: 2.5em;
+            text-align: center;
+            margin-bottom: 60px;
+            color: #FFD700;
+        }
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin: 24px auto; /* centrar con margen automático */
+            max-width: 1100px; /* limitar ancho para respiración visual */
+            box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .slider {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 24px;
+            padding: 20px 0;
+        }
+        .slider-item {
+            flex: 0 1 320px;
+            max-width: 340px;
+            background: #f4f4f4;
+            padding: 22px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.06);
+        }
+        footer {
+            background: #333;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        /* Acordeones: alinear con las cards (mismo max-width) y justificar contenido a la izquierda */
+        .accordion {
+            background: transparent;
+            border: none;
+            margin: 16px auto;
+            max-width: 1100px; /* mismo ancho que .card */
+        }
+        .accordion-header {
+            background: #2196F3;
+            color: white;
+            padding: 12px 20px;
+            cursor: pointer;
+            border-radius: 6px;
+            text-align: left; /* encabezado a la izquierda */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+        }
+        .accordion-header::after {
+            content: "\25B8"; /* small triangle pointing right */
+            float: right;
+            transition: transform 0.2s ease;
+        }
+        .accordion-header.open::after {
+            content: "\25BE"; /* small triangle pointing down */
+        }
+        /* Smooth open/close using max-height; JS ajusta maxHeight para el contenido */
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.45s cubic-bezier(.2,.8,.2,1), opacity 0.3s ease, padding 0.3s ease;
+            padding: 0; /* el contenido interno puede añadir su propio padding */
+            opacity: 0;
+            background: transparent;
+        }
+        .accordion .card-like {
+            background: white;
+            border-radius: 8px;
+            padding: 14px;
+            box-shadow: 0 6px 16px rgba(0,0,0,0.08);
+            /* allow internal scrolling when content is taller than viewport */
+            max-height: 70vh;
+            overflow: auto;
+        }
+        /* For embedded forms, keep iframe full width of the constrained container and fill available height */
+        .accordion iframe {
+            width: 100%;
+            border: none;
+            height: 100%;
+            min-height: 300px;
+            display: block;
+        }
+
+        /* container to align action buttons with cards */
+        .action {
+            max-width: 1100px;
+            margin: 16px auto;
+            text-align: center; /* change to left if you prefer left-justified */
+        }
+        .action.left { text-align: left; }
+        .btn { display: inline-block; }
+
+        /* Watermark / marca de fondo (SVG ligero, baja opacidad) */
+        .watermark {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            width: 60vw;
+            max-width: 900px;
+            opacity: 0.06;
+            z-index: 0;
+            pointer-events: none;
+        }
+        .watermark-img { width:100%; height:auto; display:block; filter: saturate(0.95); }
+        .header-logo { position: absolute; left: 18px; top: 8px; height: 56px; width: auto; z-index: 110; }
+
+        /* Responsiveness: ajustar tipografías y paddings en pantallas pequeñas */
+        @media (max-width: 800px) {
+            .hero h1 { font-size: 2rem; }
+            .hero p { font-size: 1rem; }
+            .card { padding: 18px; }
+            .accordion-header { padding: 10px 14px; }
+            .accordion iframe { min-height: 220px; }
+            .section-title { font-size: 1.6em; margin-bottom: 32px; }
+            /* Reduce internal card max-height on small screens to keep forms usable */
+            .accordion .card-like { max-height: 60vh; }
+        }
+        /* Modal fullscreen for forms */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.75);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            padding: 20px;
+        }
+        .modal-overlay.open { display:flex; }
+        .modal-content {
+            width: 100%;
+            max-width: 1100px;
+            height: 90vh;
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+        }
+        .modal-close {
+            position: absolute;
+            right: 12px;
+            top: 12px;
+            background: rgba(0,0,0,0.6);
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            z-index: 2;
+        }
+        .modal-content iframe { width:100%; height:100%; border:none; }
+        /* asegurar que el contenido esté por encima de la marca de agua */
+        section, .card, footer {
+            position: relative;
+            z-index: 2;
+        }
+    </style>
+</head>
+<body>
+    <!-- Marca de agua SVG: baja opacidad, centrada como fondo decorativo -->
+    <div class="watermark" aria-hidden="true">
+        <!-- Marca de agua: usar el logo proporcionado por el usuario -->
+        <img src="logo.png" alt="Identidad de Territorio logo" class="watermark-img">
+    </div>
+    <header>
+        <img src="logo.png" alt="Logo Identidad de Territorio" class="header-logo">
+        <h1>Identidad de Territorio</h1>
+        <nav>
+            <ul>
+                <li><a href="#identidad">Identidad</a></li>
+                <li><a href="#exportacion">Exportación</a></li>
+                <li><a href="#cultura">Cultura</a></li>
+                <li><a href="#servicios">Servicios</a></li>
+                <li><a href="#trials">Trials</a></li>
+                <li><a href="#roi">ROI</a></li>
+                <li><a href="#consulta">Consulta</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div>
+            <h1>Conectando Calidad y Cultura para el Éxito Global</h1>
+            <p>Transforma tu marca en un símbolo de resiliencia y arraigo. Descubre nuestras propuestas de valor.</p>
+            <a href="#servicios" class="btn">Explora Servicios</a>
+        </div>
+    </section>
+
+    <section id="identidad">
+        <h2 class="section-title">Identidad de Territorio</h2>
+        <p>Refuerzo emocional y trazabilidad operativa. Ancla tu marca en el concepto de identidad territorial con calidad tipo exportación e integridad organizacional.</p>
+    <div class="card">
+            <h3>Propuesta de Valor</h3>
+            <p>Ofrecemos certificación emocional y lógica: inmortaliza tu producto en una obra de arte duradera, uniendo pasión del cine con precisión tecnológica.</p>
+        </div>
+    </section>
+
+    <section id="exportacion">
+        <h2 class="section-title">Calidad de Exportación</h2>
+        <p>Garantiza trazabilidad y auditabilidad para tus clientes internacionales. Desarrollamos infraestructura digital para validar origen y calidad.</p>
+        <p><strong>Certificación que Diferencia tu Marca:</strong> Certificado digital con QR que verifica origen y RSE, reduciendo inspecciones aduaneras en 30% y ahorrando costos. Único por combinar emoción (cine) con precisión (software).</p>
+        <div class="slider">
+            <div class="slider-item">
+                <h4>Diagnóstico Inicial</h4>
+                <p>Evaluación de procesos para asegurar estándares de exportación.</p>
+            </div>
+            <div class="slider-item">
+                <h4>Sistemas de Trazabilidad</h4>
+                <p>Aplicaciones dedicadas para certificación de origen.</p>
+            </div>
+            <div class="slider-item">
+                <h4>Mantenimiento Garantizado</h4>
+                <p>Soporte continuo por 12 meses.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="cultura">
+        <h2 class="section-title">Cultura Organizacional Integral</h2>
+        <p>Social, ambiental y económico. Asocia tu marca al legado artístico y narrativo, apelando a la conciencia territorial.</p>
+        <p><strong>Visibilidad Global:</strong> Distribución en plataformas como YouTube y festivales (1M+ vistas estimadas). +50% engagement vs. anuncios estándar, alcanzando 10 países con historias que diferencian tu marca como resiliente y premium.</p>
+        <div class="card">
+            <h3>Beneficios Emocionales</h3>
+            <p>Inmortalización mediante cortometrajes, clips para RSE (Responsabilidad Social Empresarial) y máxima visibilidad global.</p>
+            <div style="text-align: center;">
+                <iframe width="560" height="315" src="https://www.youtube.com/embed/lWciuWN-Qmc" title="Misión de la Producción del Film" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section id="servicios">
+        <h2 class="section-title">Gamas de Servicio para Patrocinadores</h2>
+        <p>Ajustadas a niveles de patrocinio: Oro, Platino, Diamante. Elige tu línea: Emocional (Film), Logística/Digital (Software) o Integral (Combinado).</p>
+        <div class="card">
+            <h3>Línea A: Posicionamiento Emocional</h3>
+            <ul>
+                <li><strong>Oro:</strong> Créditos y making-of (Entrevistas y Behind The Scenes BTS).</li>
+                <li><strong>Platino:</strong> Emplazamiento en diálogo, clips para RSE.</li>
+                <li><strong>Diamante:</strong> "Presentado por [Marca]", licencia ilimitada.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Línea B: Posicionamiento Logístico/Digital</h3>
+            <ul>
+                <li><strong>Oro:</strong> Diagnóstico y módulo piloto.</li>
+                <li><strong>Platino:</strong> Desarrollo completo de trazabilidad.</li>
+                <li><strong>Diamante:</strong> Solución integral CRM/SGP.</li>
+            </ul>
+        </div>
+        <div class="card">
+            <h3>Línea C: Posicionamiento Integral</h3>
+            <ul>
+                <li><strong>Diamante:</strong> Máxima exposición emocional + software robusto + inversión compartida.</li>
+            </ul>
+        </div>
+        <div class="action">
+            <a href="#consulta" class="btn">Solicita Consulta</a>
+        </div>
+    </section>
+
+    <section id="consulta">
+        <h2 class="section-title">Solicita una Consulta Personalizada</h2>
+        <p>¿Tienes preguntas sobre nuestros servicios, gamas o presupuestos? Haz clic para expandir el formulario.</p>
+        <div class="accordion">
+            <div class="accordion-header" role="button" tabindex="0" aria-controls="consulta-content" aria-expanded="false" onclick="toggleAccordion('consulta-content', this)">Formulario de Consulta Personalizada</div>
+            <div id="consulta-content" class="accordion-content">
+                    <div class="card-like">
+                        <iframe id="iframe-consulta" title="Formulario de Consulta Personalizada" src="https://docs.google.com/forms/d/e/1FAIpQLSeolPYy8p-sjRD9HjXiHXArKyk_IKGJXUoJZJJLnI17WpIc1w/viewform?embedded=true" width="100%" frameborder="0" marginheight="0" marginwidth="0" style="height:100%">Cargando…</iframe>
+                        <p style="font-size: 0.8em; color: #666;">Formulario para consultas. Recibirás una respuesta personalizada.</p>
+                        <div style="margin-top:10px; text-align:right;">
+                            <button class="btn" onclick="openFullscreenIframe('iframe-consulta','Formulario de Consulta Personalizada')">Abrir a pantalla completa</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="trials">
+        <h2 class="section-title">Pruebas Gratuitas para Niveles Bajos</h2>
+        <p>Descubre nuestros servicios sin compromiso. Haz clic para expandir el formulario.</p>
+        <div class="accordion">
+            <div class="accordion-header" role="button" tabindex="0" aria-controls="trials-content" aria-expanded="false" onclick="toggleAccordion('trials-content', this)">Solicitar Trial (Film o Software)</div>
+            <div id="trials-content" class="accordion-content">
+                <div class="card-like">
+                    <iframe id="iframe-trial" title="Formulario de Solicitud de Trial" src="https://docs.google.com/forms/d/e/1FAIpQLSch2exxZ8VMwwZoYtkMw0bCVWeosSEjV2VjHr_CALkT6Hgb9w/viewform?embedded=true" width="100%" frameborder="0" marginheight="0" marginwidth="0" style="height:100%">Cargando…</iframe>
+                    <p style="font-size: 0.8em; color: #666;">Formulario de Google Forms. Tus respuestas se envían directamente a nuestro sistema.</p>
+                    <div style="margin-top:10px; text-align:right;">
+                        <button class="btn" onclick="openFullscreenIframe('iframe-trial','Formulario de Solicitud de Trial')">Abrir a pantalla completa</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="roi">
+        <h2 class="section-title">Calculadora de ROI Integral</h2>
+        <p>Ingresa tu presupuesto estimado y calcula el retorno potencial (cine + software). Verás un desglose visual de cómo se llega al resultado.</p>
+        <div class="card">
+            <label>Presupuesto (USD): <input type="number" id="budget" placeholder="50000"></label><br><br>
+            <button class="btn" onclick="calculateROI()">Calcular ROI</button>
+            <div id="breakdown" style="display: none; margin-top: 20px;">
+                <h4>Desglose del Cálculo</h4>
+                <p><strong>Costos Iniciales:</strong> <span id="costs"></span></p>
+                <p><strong>Beneficios Tangibles (Ventas + Ingresos):</strong> <span id="tangible"></span></p>
+                <p><strong>Beneficios Intangibles (Reputación + Alcance):</strong> <span id="intangible"></span></p>
+                <div style="background: #f4f4f4; padding: 10px; border-radius: 5px;">
+                    <p><strong>Total Beneficios:</strong> <span id="totalBenefits"></span></p>
+                    <p><strong>ROI Final:</strong> <span id="roiResult"></span></p>
+                    <div style="width: 100%; background: #ddd; height: 20px; border-radius: 10px; margin-top: 10px;">
+                        <div id="roiBar" style="height: 100%; background: linear-gradient(90deg, #4CAF50, #FFD700); border-radius: 10px; width: 0%; transition: width 1s;"></div>
+                    </div>
+                    <p style="font-size: 0.8em; color: #666;">Barra visual del ROI (ancho representa el porcentaje)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer id="contacto">
+        <p>Contacto: dominionnatura@gmail.com | © 2025 Identidad de Territorio</p>
+        <p>Síguenos en redes sociales para más inspiración.</p>
+    </footer>
+
+    <!-- Modal overlay for fullscreen forms -->
+    <div id="modal-overlay" class="modal-overlay" role="dialog" aria-hidden="true">
+        <div class="modal-content" role="document">
+            <button class="modal-close" aria-label="Cerrar formulario" onclick="closeModal()">✕</button>
+            <iframe id="modal-iframe" title="Formulario en pantalla completa"></iframe>
+        </div>
+    </div>
+
+    <script>
+        // Animación simple al scroll
+        window.addEventListener('scroll', () => {
+            const sections = document.querySelectorAll('section');
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                if (rect.top < window.innerHeight - 100) {
+                    section.style.opacity = '1';
+                    section.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        // Inicializar opacidad
+        document.querySelectorAll('section').forEach(section => {
+            section.style.opacity = '0';
+            section.style.transform = 'translateY(20px)';
+            section.style.transition = 'opacity 0.5s, transform 0.5s';
+        });
+
+        function toggleAccordion(id, headerEl) {
+            const content = document.getElementById(id);
+            if (!content) return;
+            // Determine open state via maxHeight (we use max-height animation)
+            const currentMax = content.style.maxHeight && content.style.maxHeight !== '0px';
+            const isOpen = !!currentMax;
+
+            // Close all other accordion contents (autoclose behavior)
+            document.querySelectorAll('.accordion-content').forEach(c => {
+                if (c.id !== id) {
+                    c.style.maxHeight = '0px';
+                    const hdr = document.querySelector('.accordion-header[aria-controls="' + c.id + '"]');
+                    if (hdr) {
+                        hdr.classList.remove('open');
+                        hdr.setAttribute('aria-expanded', 'false');
+                    }
+                }
+            });
+
+                if (!isOpen) {
+                    // Open this one: set maxHeight to a capped value (viewport-based) for mobile friendliness
+                    const viewportLimit = Math.round(window.innerHeight * 0.75); // 75% of viewport
+                    const desired = Math.min(content.scrollHeight, viewportLimit);
+                    content.style.maxHeight = desired + 'px';
+                    content.style.padding = '14px 0 0 0';
+                    content.style.opacity = '1';
+                    if (headerEl && headerEl.classList) {
+                        headerEl.classList.add('open');
+                        headerEl.setAttribute('aria-expanded', 'true');
+                    }
+            } else {
+                // Close it
+                    content.style.maxHeight = '0px';
+                    content.style.padding = '0';
+                    content.style.opacity = '0';
+                    if (headerEl && headerEl.classList) {
+                        headerEl.classList.remove('open');
+                        headerEl.setAttribute('aria-expanded', 'false');
+                    }
+            }
+        }
+
+        // Add keyboard accessibility for accordion headers (Enter / Space)
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.accordion-header').forEach(h => {
+                h.addEventListener('keydown', function (e) {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        toggleAccordion(this.getAttribute('aria-controls'), this);
+                    }
+                });
+            });
+        });
+
+        // Fullscreen modal controls for iframes
+        async function openFullscreenIframe(iframeId, title) {
+            const src = document.getElementById(iframeId).getAttribute('src');
+            const modal = document.getElementById('modal-overlay');
+            const modalIframe = document.getElementById('modal-iframe');
+            const modalContent = document.querySelector('.modal-content');
+            modalIframe.setAttribute('src', src);
+            modalIframe.setAttribute('title', title || 'Formulario');
+            modal.classList.add('open');
+            modal.setAttribute('aria-hidden', 'false');
+            // trap focus to close button
+            document.querySelector('.modal-close').focus();
+            // prevent body scroll
+            document.body.style.overflow = 'hidden';
+
+            // Try to enter native fullscreen for supported browsers
+            try {
+                if (modalContent.requestFullscreen) {
+                    await modalContent.requestFullscreen({ navigationUI: 'hide' });
+                } else if (modalContent.webkitRequestFullscreen) { // Safari
+                    modalContent.webkitRequestFullscreen();
+                } else if (modalContent.msRequestFullscreen) {
+                    modalContent.msRequestFullscreen();
+                }
+            } catch (err) {
+                // If fullscreen is blocked or fails, we silently continue with modal overlay
+                console.info('Fullscreen request failed or was blocked:', err);
+            }
+        }
+
+        async function closeModal() {
+            const modal = document.getElementById('modal-overlay');
+            const modalIframe = document.getElementById('modal-iframe');
+            modalIframe.setAttribute('src', '');
+            // If in fullscreen, exit it first
+            try {
+                if (document.fullscreenElement) {
+                    await document.exitFullscreen();
+                } else if (document.webkitFullscreenElement) {
+                    document.webkitExitFullscreen && document.webkitExitFullscreen();
+                }
+            } catch (err) {
+                console.info('Error exiting fullscreen:', err);
+            }
+            modal.classList.remove('open');
+            modal.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+        }
+
+        // Close modal with ESC key or clicking outside
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const modal = document.getElementById('modal-overlay');
+                if (modal.classList.contains('open')) closeModal();
+            }
+        });
+        document.getElementById('modal-overlay').addEventListener('click', (e) => {
+            if (e.target.id === 'modal-overlay') closeModal();
+        });
+
+        // ROI calculator: show breakdown with animation and simple counter
+        function calculateROI() {
+            const budget = parseFloat(document.getElementById('budget').value) || 0;
+            const breakdown = document.getElementById('breakdown');
+            const costsEl = document.getElementById('costs');
+            const tangibleEl = document.getElementById('tangible');
+            const intangibleEl = document.getElementById('intangible');
+            const totalEl = document.getElementById('totalBenefits');
+            const roiEl = document.getElementById('roiResult');
+            const roiBar = document.getElementById('roiBar');
+
+            // Simple model assumptions
+            const costs = Math.round(budget);
+            const tangible = Math.round(budget * 1.6);
+            const intangible = Math.round(budget * 0.8);
+            const totalBenefits = tangible + intangible;
+            const roiPercent = costs > 0 ? Math.round(((totalBenefits - costs) / costs) * 100) : 0;
+
+            breakdown.style.display = 'block';
+            // animate reveal
+            breakdown.style.opacity = '0';
+            breakdown.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                breakdown.style.transition = 'opacity 0.5s, transform 0.5s';
+                breakdown.style.opacity = '1';
+                breakdown.style.transform = 'translateY(0)';
+            }, 20);
+
+            // animate numeric counters (simple)
+            animateNumber(costsEl, 0, costs, 700);
+            animateNumber(tangibleEl, 0, tangible, 700);
+            animateNumber(intangibleEl, 0, intangible, 700);
+            animateNumber(totalEl, 0, totalBenefits, 700);
+            animateNumber(roiEl, 0, roiPercent, 700, '%');
+
+            // animate bar width (cap between 0 and 200 for visual)
+            const barPct = Math.max(0, Math.min(200, roiPercent));
+            setTimeout(() => { roiBar.style.width = Math.min(100, barPct) + '%'; }, 100);
+        }
+
+        function animateNumber(el, start, end, duration, suffix = '') {
+            const range = end - start;
+            const stepTime = Math.max(10, Math.floor(duration / Math.abs(range || 1)));
+            let current = start;
+            const step = range > 0 ? 1 : -1;
+            const timer = setInterval(() => {
+                current += step;
+                el.textContent = current.toLocaleString() + suffix;
+                if ((step > 0 && current >= end) || (step < 0 && current <= end)) {
+                    clearInterval(timer);
+                    el.textContent = end.toLocaleString() + suffix;
+                }
+            }, stepTime);
+        }
+    </script>
+</body>
+</html>
