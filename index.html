@@ -520,10 +520,12 @@
             modalIframe.setAttribute('title', title || 'Formulario');
             modal.classList.add('open');
             modal.setAttribute('aria-hidden', 'false');
-            // trap focus to close button
+            // trap focus to modal and focus close button
             document.querySelector('.modal-close').focus();
             // prevent body scroll
             document.body.style.overflow = 'hidden';
+            // enable focus trap and hide main content from AT
+            enableFocusTrap(modalContent);
 
             // Try to enter native fullscreen for supported browsers
             try {
@@ -557,6 +559,9 @@
             modal.classList.remove('open');
             modal.setAttribute('aria-hidden', 'true');
             document.body.style.overflow = '';
+            // restore aria-hidden and focus
+            restorePageAccessibility();
+            disableFocusTrap();
         }
 
         // Close modal with ESC key or clicking outside
@@ -569,6 +574,59 @@
         document.getElementById('modal-overlay').addEventListener('click', (e) => {
             if (e.target.id === 'modal-overlay') closeModal();
         });
+
+        // Focus-trap implementation: keep focus inside modal while open
+        let focusTrapHandler = null;
+        let previouslyFocused = null;
+        function enableFocusTrap(modal) {
+            previouslyFocused = document.activeElement;
+            const focusableSelectors = 'a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, [tabindex]:not([tabindex="-1"])';
+            const focusable = Array.from(modal.querySelectorAll(focusableSelectors)).filter(el => el.offsetParent !== null);
+            const first = focusable[0];
+            const last = focusable[focusable.length -1];
+
+            focusTrapHandler = function(e) {
+                if (e.key === 'Tab') {
+                    if (focusable.length === 0) {
+                        e.preventDefault();
+                        return;
+                    }
+                    if (e.shiftKey) { // shift + tab
+                        if (document.activeElement === first) {
+                            e.preventDefault();
+                            last.focus();
+                        }
+                    } else { // tab
+                        if (document.activeElement === last) {
+                            e.preventDefault();
+                            first.focus();
+                        }
+                    }
+                }
+            };
+            document.addEventListener('keydown', focusTrapHandler);
+            // hide main page from assistive tech
+            setPageAccessibilityHidden(true);
+        }
+
+        function disableFocusTrap() {
+            if (focusTrapHandler) {
+                document.removeEventListener('keydown', focusTrapHandler);
+                focusTrapHandler = null;
+            }
+            if (previouslyFocused && previouslyFocused.focus) previouslyFocused.focus();
+        }
+
+        function setPageAccessibilityHidden(hidden) {
+            // add aria-hidden to main page elements to hide them from screen readers
+            document.querySelectorAll('header, main, section, footer, nav').forEach(el => {
+                if (hidden) el.setAttribute('aria-hidden', 'true'); else el.removeAttribute('aria-hidden');
+            });
+        }
+
+        function restorePageAccessibility() {
+            setPageAccessibilityHidden(false);
+        }
 
         // ROI calculator: show breakdown with animation and simple counter
         function calculateROI() {
