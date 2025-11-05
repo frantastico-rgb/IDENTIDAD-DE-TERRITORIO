@@ -226,9 +226,34 @@
             .section-title { font-size: 1.6em; margin-bottom: 32px; }
             /* Reduce internal card max-height on small screens to keep forms usable */
             .accordion .card-like { max-height: 60vh; }
-            /* Ajuste del logo en pantallas pequeñas */
-            .header-logo { height: 64px; }
-            header h1 { font-size: 1.05rem; }
+            
+            /* Optimización header móvil: más compacto y logo más grande */
+            body { padding-top: 80px; } /* reducir padding para que header ocupe menos espacio */
+            header { 
+                padding: 8px 16px; 
+                gap: 4px; 
+                min-height: 70px; /* altura fija más compacta */
+            }
+            .header-logo { 
+                height: 45px; /* logo más grande y visible */
+                margin: 2px auto 0;
+            }
+            header h1 { 
+                font-size: 0.9rem; 
+                margin: 2px 0 4px;
+                line-height: 1;
+            }
+            nav ul { 
+                gap: 12px; 
+                flex-wrap: wrap;
+                justify-content: center;
+                margin: 0;
+                padding: 0;
+            }
+            nav a { 
+                font-size: 0.85rem; 
+                padding: 2px 4px;
+            }
         }
         /* Modal fullscreen for forms */
         .modal-overlay {
