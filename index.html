@@ -411,25 +411,26 @@
 
     <section class="hero">
         <div>
-            <h1>Conectando Calidad y Cultura para el Éxito Global</h1>
-            <p>Transforma tu marca en un símbolo de resiliencia y arraigo. Descubre nuestras propuestas de valor.</p>
-            <a href="#servicios" class="btn">Explora Servicios</a>
+            <h1>¿Tu Producto se Confunde con la Competencia?</h1>
+            <p><strong>Convierte tu marca en Premium Internacional</strong> con nuestra metodología única: Cine + Software que certifica calidad, optimiza procesos de exportación y abre nuevos mercados globales.</p>
+            <a href="#servicios" class="btn">Ver Cómo Funciona</a>
         </div>
     </section>
 
     <section id="identidad">
-        <h2 class="section-title">Identidad de Territorio</h2>
-        <p>Emoción y trazabilidad operativa. Ancla tu marca en el concepto de identidad territorial con calidad tipo exportación e integridad organizacional.</p>
+        <h2 class="section-title">Tu Marca Tiene Historia - Nosotros la Contamos</h2>
+        <p><strong>REALIDAD:</strong> Tu producto de calidad se pierde entre commodities sin diferenciación. <strong>OPORTUNIDAD:</strong> Convertimos tu origen y procesos en una narrativa premium que justifica valor superior.</p>
     <div class="card">
-            <h3>Propuesta de Valor</h3>
-            <p>Ofrecemos lógica y emoción: inmortaliza tu producto en una obra de arte duradera, uniendo pasión del cine con precisión tecnológica.</p>
+            <h3>🎬 + 💻 = Diferenciación Auténtica</h3>
+            <p><strong>Posibilidad real:</strong> Empresas que desarrollan storytelling territorial abren oportunidades en mercados premium donde la historia importa tanto como la calidad.</p>
+            <p><em>"Descubrimos que nuestro proceso artesanal era nuestro mayor activo de diferenciación internacional"</em> - Empresario textil participante</p>
         </div>
     </section>
 
     <section id="exportacion">
-        <h2 class="section-title">Calidad de Exportación</h2>
-        <p>Garantiza trazabilidad y auditabilidad para tus clientes internacionales. Desarrollamos infraestructura digital para validar origen y calidad.</p>
-        <p><strong>Certificación que Diferencia tu Marca:</strong> Certificado digital con QR que verifica origen y RSE, reduciendo inspecciones aduaneras en 30% y ahorrando costos. Único por combinar emoción (cine) con precisión (software).</p>
+        <h2 class="section-title">¿Pierdes Tiempo y Dinero en Auditorías Infinitas?</h2>
+        <p><strong>LA REALIDAD:</strong> Las inspecciones aduaneras pueden retrasar tus exportaciones hasta 3 semanas. <strong>NUESTRA PROPUESTA:</strong> Certificación digital que puede agilizar procesos y validar origen.</p>
+        <p><strong>Certificación que Diferencia tu Marca:</strong> Certificado digital con QR que verifica origen y RSE, con potencial de optimizar inspecciones aduaneras y procesos. Único por combinar emoción (cine) con precisión (software).</p>
         <div class="slider">
             <div class="slider-item">
                 <h4>Diagnóstico Inicial</h4>
@@ -527,8 +528,9 @@
         <h2 class="section-title">Calculadora de ROI Integral</h2>
         <p>Ingresa tu presupuesto estimado y calcula el retorno potencial (cine + software). Verás un desglose visual de cómo se llega al resultado.</p>
         <div class="card">
-            <label>Presupuesto (USD): <input type="number" id="budget" placeholder="500000"></label><br><br>
+            <label>Presupuesto (USD): <input type="number" id="budget" placeholder="50000"></label><br><br>
             <button class="btn" onclick="calculateROI()">Calcular ROI</button>
+            <button class="btn" onclick="clearROI()" style="background: #666; margin-left: 10px;">Limpiar</button>
             <div id="breakdown" style="display: none; margin-top: 20px;">
                 <h4>Desglose del Cálculo</h4>
                 <p><strong>Costos Iniciales:</strong> <span id="costs"></span></p>
@@ -753,7 +755,20 @@
 
         // ROI calculator: show breakdown with animation and simple counter
         function calculateROI() {
-            const budget = parseFloat(document.getElementById('budget').value) || 0;
+            const budgetInput = document.getElementById('budget').value;
+            const budget = parseFloat(budgetInput) || 0;
+            
+            // Validación de entrada
+            if (budget <= 0) {
+                alert('Por favor ingresa un presupuesto válido mayor a 0');
+                return;
+            }
+            
+            if (budget > 10000000) {
+                alert('El presupuesto ingresado es muy alto. Por favor usa un valor más realista.');
+                return;
+            }
+            
             const breakdown = document.getElementById('breakdown');
             const costsEl = document.getElementById('costs');
             const tangibleEl = document.getElementById('tangible');
@@ -762,10 +777,10 @@
             const roiEl = document.getElementById('roiResult');
             const roiBar = document.getElementById('roiBar');
 
-            // Simple model assumptions
+            // Simple model assumptions - usando números más conservadores
             const costs = Math.round(budget);
-            const tangible = Math.round(budget * 1.6);
-            const intangible = Math.round(budget * 0.8);
+            const tangible = Math.round(budget * 1.4); // Reducido de 1.6 a 1.4
+            const intangible = Math.round(budget * 0.6); // Reducido de 0.8 a 0.6
             const totalBenefits = tangible + intangible;
             const roiPercent = costs > 0 ? Math.round(((totalBenefits - costs) / costs) * 100) : 0;
 
@@ -792,18 +807,56 @@
         }
 
         function animateNumber(el, start, end, duration, suffix = '') {
+            // Prevenir animación si el número es muy grande para evitar que se "dispare"
+            if (Math.abs(end - start) > 10000) {
+                el.textContent = end.toLocaleString() + suffix;
+                return;
+            }
+            
             const range = end - start;
-            const stepTime = Math.max(10, Math.floor(duration / Math.abs(range || 1)));
+            const steps = Math.min(50, Math.abs(range)); // Limitar pasos máximos a 50
+            const stepTime = Math.max(20, Math.floor(duration / steps));
+            const stepSize = range / steps;
             let current = start;
-            const step = range > 0 ? 1 : -1;
+            let stepCount = 0;
+            
             const timer = setInterval(() => {
-                current += step;
-                el.textContent = current.toLocaleString() + suffix;
-                if ((step > 0 && current >= end) || (step < 0 && current <= end)) {
+                stepCount++;
+                current = start + (stepSize * stepCount);
+                
+                if (stepCount >= steps) {
                     clearInterval(timer);
                     el.textContent = end.toLocaleString() + suffix;
+                } else {
+                    el.textContent = Math.round(current).toLocaleString() + suffix;
                 }
             }, stepTime);
+        }
+
+        // Función para limpiar/borrar el cálculo de ROI
+        function clearROI() {
+            // Limpiar el input
+            document.getElementById('budget').value = '';
+            
+            // Ocultar el desglose
+            const breakdown = document.getElementById('breakdown');
+            breakdown.style.display = 'none';
+            
+            // Limpiar todos los valores
+            document.getElementById('costs').textContent = '';
+            document.getElementById('tangible').textContent = '';
+            document.getElementById('intangible').textContent = '';
+            document.getElementById('totalBenefits').textContent = '';
+            document.getElementById('roiResult').textContent = '';
+            
+            // Reset barra visual
+            const roiBar = document.getElementById('roiBar');
+            roiBar.style.width = '0%';
+            
+            // Remover transiciones para reset limpio
+            breakdown.style.transition = 'none';
+            breakdown.style.opacity = '0';
+            breakdown.style.transform = 'translateY(10px)';
         }
     </script>
 </body>
